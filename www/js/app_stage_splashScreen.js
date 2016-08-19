@@ -9,6 +9,10 @@
 		create: function() {
 			var background = this.game.add.sprite(-960, -960, 'splash_screen_background');
 			this.game.responsive.start();
+			delayTimer = this.game.time.create(false);
+			delayTimer.loop(2000, startGameState, this);
+			delayTimer.start();
+			console.log("starting timer");
 		},
 		// update: function() {
 
@@ -16,5 +20,9 @@
 		// render: function() {
 
 		// }
-	}
+	};
+
+	function startGameState() {
+		this.game.state.start('game_screen');
+	};
 } (this))

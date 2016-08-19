@@ -14,7 +14,7 @@ var SQUARE_RATIO = 1000;
 var PORTRAIT_STD_RATIO = 750;
 var PORTRAIT_WIDE_RATIO = 562;
 
-var debug = true;
+var debug = false;
 
 function RP(game){ 
 	this.rgame = game;
