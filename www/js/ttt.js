@@ -41,6 +41,7 @@
     	this.state = this.RESTART_GAME;
 
         this.winner = this.EMPTY;
+        this.winningCombo = -1;
 
         this.start_restartGame();
     };
@@ -50,8 +51,8 @@
 	};
 
 	// returns:
-	// -1 – invalid move; no move made
-	//  0 – valid move, continue play
+	// false; no move made
+	// true – valid move, continue play
 	TTT.prototype.playMove = function(position) {
 		if (this.state==this.WAIT_ON_X) {
 			return this.waitOnX_playPosition(position);
@@ -59,7 +60,7 @@
 		if (this.state==this.WAIT_ON_O) {
 			return this.waitOnO_playPosition(position);
 		};
-		return -1;
+		return false;
 	};
 
 	TTT.prototype.startGame = function(starting_player) {
@@ -161,14 +162,14 @@
 	// +-----------+
 	// 
 	var WINNING_CONDITIONS = [
-	    [0,1,2],  // across top
-	    [3,4,5],  // across middle
-	    [6,7,8],  // across bottom
-	    [0,3,6],  // down left
-	    [1,4,7],  // down middle
-	    [2,5,8],  // down right
-	    [0,4,8],  // diagonal
-	    [2,4,6]   // other diagonal
+	    [0,1,2],  // 0 across top
+	    [3,4,5],  // 1 across middle
+	    [6,7,8],  // 2 across bottom
+	    [0,3,6],  // 3 down left
+	    [1,4,7],  // 4 down middle
+	    [2,5,8],  // 5 down right
+	    [0,4,8],  // 6 left diagonal
+	    [2,4,6]   // 7 right diagonal
 	];
 
 	// -1 – invalid move; no move made
@@ -181,6 +182,7 @@
             var cond = WINNING_CONDITIONS[i];
             if (this.board[cond[0]]!=this.EMPTY) {
             	if (this.board[cond[0]]==this.board[cond[1]] && this.board[cond[1]]==this.board[cond[2]]) {
+            		this.winningCombo = i;
             		if (this.board[cond[0]]==this.X) return this.X;
             		if (this.board[cond[0]]==this.O) return this.O;
             	};
@@ -215,7 +217,9 @@
     TTT.prototype.start_restartGame = function() {
     	if (debug) console.log("start RESTART_GAME");
     	this.state = this.RESTART_GAME;
-    	this.board = this.EMPTY_BOARD;
+    	for (i=0; i<9; i++) {
+    		this.board[i] = this.EMPTY;
+    	};
     	this.winner = this.EMPTY;
     	this.exit_restartGame();
     	this.start_waitOnStart();
@@ -250,12 +254,12 @@
 
 	TTT.prototype.waitOnX_playPosition = function(position) {
 		if (this.board[position] != this.EMPTY) {
-			return -1;
+			return false;
 		};
 		this.board[position] = this.X;
 		this.exit_waitOnX();
 		this.start_animateX();
-		return 0;
+		return true;
 	};
 
 
@@ -280,12 +284,12 @@
 
 	TTT.prototype.waitOnO_playPosition = function(position) {
 		if (this.board[position] != this.EMPTY) {
-			return -1;
+			return false;
 		};
 		this.board[position] = this.O;
 		this.exit_waitOnO();
 		this.start_animateO();
-		return 0;
+		return true;
 	};
 
     //  state 6: ANIMATE_O

@@ -1,6 +1,7 @@
 (function(global) {
 	var game = new Phaser.Game(1920, 1920, Phaser.AUTO, 'body');
 	game.responsive = new RP(game);
+	game.ttt = new TTT();
 
 	game.state.add('splash_screen', AppStateSplashScreen);
 	game.state.add('game_screen', AppStateGameScreen);
